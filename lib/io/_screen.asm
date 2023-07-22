@@ -166,7 +166,9 @@ STDLIB_PRINTSTR SUBROUTINE
     cpy R2
     bcc .1
     beq .1
+    rts
 .2:
+    iny
 	rts
 	ENDIF
 	
