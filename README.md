@@ -42,7 +42,7 @@ That's it, you can now run XC=BASIC.
 This branch adds opt-in **debug markers** to the generated DASM assembly so a
 source-level debugger can map `.bas` lines to machine addresses and inspect
 typed variables. It is used by
-[X16_XBasicDebugger](https://github.com/vinej/X16_XBasicDebugger).
+[X16_XCBasicDebugger](https://github.com/vinej/X16_XCBasicDebugger).
 
 Two hooks (see the diff in `source/compiler/compiler.d` and
 `source/compiler/variable.d`):
