@@ -58,8 +58,11 @@ class IntermediateCode
         // Bits 15-8: base machine
         // Bits 7-0: machine config 
         string startUpCode =
-`    PROCESSOR 6502
-c64      EQU %0000000100000000
+// The Commander X16 CPU is a 65C02 (trb/tsb/stz/bra/phx...); emit that so
+// programs and included asm libraries can use its extra opcodes. 65C02 is a
+// superset of 6502, so the runtime's own 6502 code assembles unchanged.
+"    PROCESSOR " ~ (target == "x16" ? "65c02" : "6502") ~ "\n" ~
+`c64      EQU %0000000100000000
 vic20    EQU %0000001000000000
 vic20_3k EQU %0000001000000001
 vic20_8k EQU %0000001000000010

@@ -1,4 +1,8 @@
+	IF TARGET == x16
+	PROCESSOR 65c02
+	ELSE
 	PROCESSOR 6502
+	ENDIF
 	
 	; Convert float on stack to byte
 	MAC F_cbyte_float ; @pull @push

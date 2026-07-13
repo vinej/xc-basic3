@@ -1,4 +1,8 @@
+	IF TARGET == x16
+	PROCESSOR 65c02
+	ELSE
 	PROCESSOR 6502
+	ENDIF
 	
 	; Perform OR on top 2 long ints of stack
 	MAC orlong

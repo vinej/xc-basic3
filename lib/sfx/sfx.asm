@@ -1,4 +1,8 @@
+	IF TARGET == x16
+	PROCESSOR 65c02
+	ELSE
 	PROCESSOR 6502
+	ENDIF
 	
 	IF TARGET == c64 || TARGET == c128 || TARGET == mega65
 	INCLUDE "sfx/_sid.asm"

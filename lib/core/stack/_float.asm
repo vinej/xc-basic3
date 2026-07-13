@@ -1,4 +1,8 @@
+	IF TARGET == x16
+	PROCESSOR 65c02
+	ELSE
 	PROCESSOR 6502
+	ENDIF
 	
 	; Push immediate float on stack
 	; Expects 4 bytes, e. g pfloat 01,02,FE,FF
