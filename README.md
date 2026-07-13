@@ -1,3 +1,10 @@
+> **`debug-info` fork branch.** This branch is based on upstream
+> [`neilsf/xc-basic3` v3.2.0-beta](https://github.com/neilsf/xc-basic3/releases/tag/v3.2.0-beta)
+> (commit `af1a5d9`), with added modifications for source-level debugging on the
+> Commander X16: opt-in `; source:`/`; var:` debug-info markers, 65C02 targeting,
+> and the bundled `x16_library` modules. Upstream is MIT-licensed; see `LICENSE`.
+> Used by [X16_XCBasicDebugger](https://github.com/vinej/X16_XCBasicDebugger).
+
 # XC=BASIC 3
 
 XC=BASIC is a cross compiled, modern BASIC programming language for MOS 65xx based targets. The supported targets are:
