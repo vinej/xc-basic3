@@ -36,3 +36,24 @@ Then move the generated executable to any subfolder in the `bin/` dir, for examp
 (This last step is important because XC=BASIC can only find the library files if they're located in `../../lib` relative to the executable.)
 
 That's it, you can now run XC=BASIC.
+
+## Debug-info fork (branch `debug-info`)
+
+This branch adds opt-in **debug markers** to the generated DASM assembly so a
+source-level debugger can map `.bas` lines to machine addresses and inspect
+typed variables. It is used by
+[X16_XBasicDebugger](https://github.com/vinej/X16_XBasicDebugger).
+
+Two hooks (see the diff in `source/compiler/compiler.d` and
+`source/compiler/variable.d`):
+
+* `; source: <fileId> <file>:<line>` — emitted before each **user** statement.
+  Survives into the DASM `-l` list file with its address, giving a
+  line ↔ address map. (Line number counts `'\n'` for LF-file correctness.)
+* `; var: <label> type=… single=… dims=… vis=… file=… [proc=…]` — emitted per
+  static variable, giving a typed manifest to pair with the DASM `-s` symbol
+  dump.
+
+Both are plain assembly comments — they do not change the emitted machine code.
+Based on upstream tag `v3.2.0-beta` (the first version with Commander X16
+support). Original XC=BASIC © Csaba Fekete, MIT (see LICENSE).

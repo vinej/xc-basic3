@@ -221,7 +221,20 @@ class VariableCollection
             else {
                 code = variable.getAsmLabel() ~ " DS.B " ~ to!string(length) ~ "\n";
             }
-            this.compiler.getImCode().appendSegment(IntermediateCode.VAR_SEGMENT, code);
+            // --- XC=BASIC debug-info hook (vinej fork): emit a typed variable
+            // manifest so a debugger can format values by type/dimensions.
+            // Address is resolved from the DASM symbol dump by getAsmLabel(). ---
+            string _dbgVar = "; var: " ~ variable.getAsmLabel()
+                ~ " type=" ~ variable.type.name
+                ~ " single=" ~ to!string(variable.getSingleLength())
+                ~ " dims=" ~ to!string(variable.dimensions[0]) ~ "," ~ to!string(variable.dimensions[1])
+                ~ "," ~ to!string(variable.dimensions[2])
+                ~ " vis=" ~ to!string(variable.visibility)
+                ~ " file=" ~ variable.fileId
+                ~ (variable.procName != "" ? (" proc=" ~ variable.procName) : "")
+                ~ "\n";
+            // --- end debug-info hook ---
+            this.compiler.getImCode().appendSegment(IntermediateCode.VAR_SEGMENT, _dbgVar ~ code);
         }
     }
 

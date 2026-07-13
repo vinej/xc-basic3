@@ -248,6 +248,18 @@ final class Compiler
                             this.currentFileId = savedFileId;
                         }
                         else {
+                            // --- XC=BASIC debug-info hook (vinej fork): emit a source-line
+                            // marker before each user statement so a debugger can map
+                            // .bas line -> machine address via the DASM listing. ---
+                            if(this.compilingUserCode) {
+                                SourceFile _dbgFile = SourceFile.findInContainer(this.currentFileName);
+                                immutable ulong _dbgLine = count(_dbgFile.getSourceCode()[0 .. child.begin], '\n') + 1;
+                                this.getImCode().appendProgramSegment(
+                                    "; source: " ~ this.currentFileId ~ " " ~ this.currentFileName
+                                    ~ ":" ~ to!string(_dbgLine) ~ "\n"
+                                );
+                            }
+                            // --- end debug-info hook ---
                             Statement stmt = stmtFactory(child, this);
                             if(this.inTypeDef && !this.inMethod
                                 && stmt.classinfo.name != "statement.rem_stmt.Rem_stmt"
