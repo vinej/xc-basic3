@@ -88,9 +88,26 @@ USEIRQ   EQU ` ~ (useIrqs ? "1" : "0") ~ `
 FASTIRQ  EQU ` ~ (fastIrqs ? "1" : "0") ~ `
 USESPR   EQU ` ~ (useSprites ? "1" : "0") ~ `
 USESFX   EQU ` ~ (useSound ? "1" : "0") ~ `
-    SEG "UPSTART"
+` ~ (target == "x16" ? getX16LibSetup() : "") ~ `    SEG "UPSTART"
     ORG $` ~ to!string(startAddress, 16) ~ "\n" ~ getBasicStub();
         return startUpCode;
+    }
+
+    // x16_library integration (vinej fork): for the x16 target, auto-wire the
+    // bundled DASM library (lib/x16asm). x16.asm (constants + macros) emits no
+    // code and goes up top; x16_code.asm (the routines) is gated by X16_USE_*
+    // so it emits nothing unless a wrapper module (e.g. x16sprite.bas) sets a
+    // flag. Programs that don't use it therefore pay nothing.
+    private string getX16LibSetup()
+    {
+        return "X16_ZP = $70\n    INCDIR \"" ~ getLibraryDir()
+            ~ "/x16asm\"\n    INCLUDE \"x16.asm\"\n";
+    }
+
+    private string getX16LibCode()
+    {
+        return "\n    INCDIR \"" ~ getLibraryDir()
+            ~ "/x16asm\"\n    INCLUDE \"x16_code.asm\"\n";
     }
 
     private string getBasicStub()
@@ -121,6 +138,7 @@ next_line:
         return  getStartUp() ~
                 getSegment(PROGRAM_SEGMENT) ~ "    xend\n\n" ~
                 getSegment(ROUTINE_SEGMENT) ~
+                (target == "x16" ? getX16LibCode() : "") ~
                 getSegment(LIBRARY_SEGMENT) ~
                 getSegment(DATA_SEGMENT) ~
                 getSegment(VAR_SEGMENT) ~
